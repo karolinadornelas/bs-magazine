@@ -17,11 +17,13 @@
                 faça o login ou crie uma conta.
             </p>
             <div class="btn-box">
-                <button id="btn-continue">continuar sem logar</button>
-                <button id="btn-signin">entrar</button>
-                <button id="btn-signup">criar uma conta</button>
+                <button id="btn-continue" onClick="showBittersweetContent()">continuar sem logar</button>
+                <button id="btn-signin" onClick="showLoginForm()">entrar</button>
+                <button id="btn-signup" onClick="showSignUpForm()">criar uma conta</button>
             </div>
         </div>
+        <div class="spinner" id="spinner"></div>
+
     </div>
 
     <div id="magazine-layout" style="display: none;">
@@ -32,6 +34,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js"></script>
-    <script type="module" src="script.js"></script>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
