@@ -1,3 +1,7 @@
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js';
+import { getFirestore, setDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js';
+
 const firebaseConfig = {
     apiKey: "AIzaSyDeUCw5QdPTRSv4bEHJ1hb5x_LKW-PkyRk",
     authDomain: "bittersweet-k.firebaseapp.com",
@@ -8,10 +12,6 @@ const firebaseConfig = {
     measurementId: "G-6EHR9HKEVX",
 };
 
-import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js';
-import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js';
-import { getFirestore, setDoc, doc } from 'https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js';
-
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
@@ -21,12 +21,22 @@ const btnSignIn = document.getElementById('btn-signin');
 const btnSignUp = document.getElementById('btn-signup');
 const magazineLayout = document.getElementById('magazine-layout');
 const loginRequest = document.getElementById('login-request');
+const spinner = document.getElementById('spinner');
+
+function showSpinner() {
+    spinner.style.display = 'block';
+}
+
+function hideSpinner() {
+    spinner.style.display = 'none';
+}
 
 function showBittersweetContent(){
+    hideSpinner();
     loginRequest.style.display = 'none';
     magazineLayout.style.display = 'block';
 }
-/*trocando o conteudo*/
+
 function showLoginForm() {
     loginRequest.innerHTML = `
         <div class="login-request-entry">
@@ -42,22 +52,27 @@ function showLoginForm() {
                     <button type="submit">Entrar</button>
                     <button id="back-to-main">Voltar</button>
                 </div>
-            </form>
-            
+            </form> 
         </div>
     `;
 
-    document.getElementById('login-form').addEventListener('submit', (e) => {
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('login-email').value;
         const password = document.getElementById('login-password').value;
+        
+        loginRequest.style.display='none';
+        showSpinner();
+
         signInWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
-                alert(`Bem-vindo ao Bittersweet, ${user.email}`);
+                hideSpinner();
+                alert(`Bem-vindo de volta, ${user.email}`);
                 showBittersweetContent();
             })
             .catch(error => {
+                hideSpinner();
                 alert(`Erro: ${error.message}`);
             });
     });
@@ -85,26 +100,36 @@ function showSignUpForm() {
         </form>
     `;
 
-    document.getElementById('signup-form').addEventListener('submit', (e) => {
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
         e.preventDefault();
         const email = document.getElementById('signup-email').value;
         const password = document.getElementById('signup-password').value;
         const username = document.getElementById('signup-username').value;
         
+        loginRequest.style.display='none';
+        showSpinner();
+
         createUserWithEmailAndPassword(auth, email, password)
             .then(userCredential => {
                 const user = userCredential.user;
-                console.log(`"Um novo membro acaba de surgir, fique à vontade", ${username}`)
-                return setDoc(doc(db, 'users', user.uid), {
-                    username: username,
-                    email: email
+                updateProfile(user, {
+                    displayName: username
+                }).then(() => {
+                    setDoc(doc(db, "users", user.uid), {
+                        username: username,
+                        email: email
+                    });
+
+                    hideSpinner();
+                    alert(`Um novo membro acaba de surgir, fique à vontade ${username}`);
+                    showBittersweetContent();
+                }).catch(error => {
+                    hideSpinner();
+                    alert(`Erro ao atualizar o perfil: ${error.message}`);
                 });
             })
-            .then(() => {
-                alert(`Um novo membro acaba de surgir, fique à vontade ${username}`);
-                showBittersweetContent();// Adicione a lógica para continuar após a criação da conta, se necessário
-            })
             .catch(error => {
+                hideSpinner();
                 alert(`Erro: ${error.message}`);
             });
     });
@@ -125,16 +150,26 @@ function showMainContent() {
         </div>
     `;
     document.getElementById('btn-continue').addEventListener('click', () => {
-        loginRequest.style.display = 'none'; // Esconde a caixa de login
-        magazineLayout.style.display = 'block'; // Mostra o conteúdo da revista
+        loginRequest.style.display = 'none';
+        showSpinner();
+        setTimeout(() => {
+            hideSpinner();
+            magazineLayout.style.display = 'block';
+        }, 500);
     });
     document.getElementById('btn-signin').addEventListener('click', showLoginForm);
     document.getElementById('btn-signup').addEventListener('click', showSignUpForm);
 }
 
 btnContinue.addEventListener('click', () => {
-    loginRequest.style.display = 'none'; 
-    magazineLayout.style.display = 'block'; 
+    loginRequest.style.display = 'none';
+    showSpinner();
+    setTimeout(() => {
+        hideSpinner();
+        magazineLayout.style.display = 'block';
+    }, 5000);
 });
 btnSignIn.addEventListener('click', showLoginForm);
 btnSignUp.addEventListener('click', showSignUpForm);
+
+showMainContent();
