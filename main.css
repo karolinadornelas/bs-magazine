@@ -1,0 +1,117 @@
+html,
+body{
+    margin: 0 auto;
+    font-family: "Quicksand", sans-serif;
+}
+
+/*movie-page*/
+.movie-highlight{
+    display: flex;
+}
+
+.movie-highlight img{
+    width: 570px;
+}
+
+.movie-highlight span{
+    position: absolute;
+    margin-top: 455px;
+}
+
+.movie-highlight-disc{
+    color: white;
+    font-size: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    position: absolute;
+    margin-top: 20px;
+}
+
+header{
+    margin-left: 30px;
+}
+
+/* index*/
+
+#content-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#login-request,
+.login-request-register{
+    border: 1px solid rgb(255, 255, 255);
+    border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px rgb(192, 192, 192);
+    width: 350px;
+    height: 250px;
+    padding: 55px 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 200px;
+}
+
+#login-request p,
+.login-request-entry p,
+.login-request-register p{
+    /* border: 1px solid black; */
+    width: 295px;
+    text-align: center;
+    margin-top: -10px;
+}
+
+.login-request-entry h2{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-request-entry input,
+#signup-form input{
+    font-family: "Quicksand", sans-serif;
+    border-bottom: 1px solid black;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    margin: 10px;
+}
+
+.btn-box button{
+    font-family: "Quicksand", sans-serif;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 10px;
+    cursor: pointer;
+}
+
+#login-form,
+#register-form,
+#signup-form{
+    display: flex;
+    flex-direction: column; 
+    width: 270px; 
+    justify-content: center;  
+}
+
+#login-form button,
+#register-form button,
+#signup-form button{
+    font-family: "Quicksand", sans-serif;
+    background-color: white;
+    border: 1px solid gray;
+    border-radius: 15px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100px;
+    margin-top: 15px;
+}
+
+.signup-form-box,
+.login-form-box{
+    display: flex;
+    justify-content: space-around;
+}
+
