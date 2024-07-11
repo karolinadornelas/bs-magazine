@@ -28,8 +28,29 @@
 
     <div id="magazine-layout" style="display: none;">
         <h1>Bem-vindo à Bittersweet Magazine!</h1>
-        <p>conteudo</p>
+        <div id="pages-layout">
+            <p>conteudo</p>
+            <h1>Vote for your favorite flavor</h1>
+                <button id="vote-chocolate">Vote for Chocolate</button>
+                <button id="vote-strawberry">Vote for Strawberry</button>
+
+            <h2>Vote Counts</h2>
+            <p>Total Votes: <span id="total-votes">0</span></p>
+            <p>Chocolate Votes: <span id="chocolate-votes">0</span></p>
+            <p>Strawberry Votes: <span id="strawberry-votes">0</span></p>
+        </div>
+        
+<!--    <div id="comment-section">
+            <div id="comment-box">
+                <div class="user-comment">
+                    <textarea id="comment-text" placeholder="Digite seu comentário..."></textarea>
+                    <button id="comment-btn">Comentar</button>
+                </div>
+                <div id="comments-list"></div>
+            </div> -->
     </div>
+
+    
 
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
