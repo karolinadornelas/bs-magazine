@@ -6,6 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="main.css">
     <title>Bittersweet</title>
 </head>
@@ -17,13 +18,12 @@
                 faça o login ou crie uma conta.
             </p>
             <div class="btn-box">
-                <button id="btn-continue" onClick="showBittersweetContent()">continuar sem logar</button>
-                <button id="btn-signin" onClick="showLoginForm()">entrar</button>
-                <button id="btn-signup" onClick="showSignUpForm()">criar uma conta</button>
+                <button id="btn-continue">continuar sem logar</button>
+                <button id="btn-signin">entrar</button>
+                <button id="btn-signup">criar uma conta</button>
             </div>
         </div>
         <div class="spinner" id="spinner"></div>
-
     </div>
 
     <div id="magazine-layout" style="display: none;">
@@ -31,8 +31,8 @@
         <div id="pages-layout">
             <p>conteudo</p>
             <h1>Vote for your favorite flavor</h1>
-                <button id="vote-chocolate">Vote for Chocolate</button>
-                <button id="vote-strawberry">Vote for Strawberry</button>
+            <button id="vote-chocolate">Vote for Chocolate</button>
+            <button id="vote-strawberry">Vote for Strawberry</button>
 
             <h2>Vote Counts</h2>
             <p>Total Votes: <span id="total-votes">0</span></p>
@@ -40,21 +40,49 @@
             <p>Strawberry Votes: <span id="strawberry-votes">0</span></p>
         </div>
         
-<!--    <div id="comment-section">
-            <div id="comment-box">
-                <div class="user-comment">
-                    <textarea id="comment-text" placeholder="Digite seu comentário..."></textarea>
-                    <button id="comment-btn">Comentar</button>
+        <div id="interactive-bar">
+            <div id="comment-section">
+                <h2>Comentários</h2>
+                <div id="comment-box">
+                    <textarea id="comment-text" placeholder="deixe um comentário!"></textarea>
+                    <button id="submit-comment">Enviar Comentário</button>
                 </div>
                 <div id="comments-list"></div>
-            </div> -->
+            </div>
+
+            <div id="music-player">
+                <div class="wrap">
+                    <div class="music-info">
+                        <img id="cover" src="default-cover.jpg" alt="Capa do Álbum">
+                        <div class="music-description">
+                            <h2 id="songName"></h2>
+                            <p id="songArtist"></p>
+                        </div>
+                    </div>
+                    <div class="controls">
+                        <button id="prevBtn"><i class="fa-solid fa-backward"></i></button>
+                        <button id="playBtn"><i class="fa-solid fa-play"></i></button>
+                        <button id="nextBtn"><i class="fa-solid fa-forward"></i></button>
+                    </div>
+                    <div class="progress">
+                        <input type="range" id="progressBar" value="0">
+                    </div>
+                </div>
+                
+            </div>
+            
+            <audio id="audioPlayer">
+                <source src="song.mp3" type="audio/mpeg">
+                Seu navegador não suporta áudio HTML5.
+            </audio>
+            
+        </div>
+        
     </div>
 
-    
-
+    <script type="module" src="main.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js"></script>
-    <script type="module" src="main.js"></script>
 </body>
 </html>
