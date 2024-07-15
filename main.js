@@ -33,6 +33,18 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const btnContinue = document.getElementById("btn-continue");
+const btnSignIn = document.getElementById("btn-signin");
+const btnSignUp = document.getElementById("btn-signup");
+
+const magazineLayout = document.getElementById("magazine-layout");
+const loginRequest = document.getElementById("login-request");
+const spinner = document.getElementById("spinner");
+const voteChocolate = document.getElementById("vote-chocolate");
+const voteStrawberry = document.getElementById("vote-strawberry");
+const commentText = document.getElementById("comment-text");
+
+
 const avatars = [
   "https://i.pinimg.com/736x/a3/92/3a/a3923a22e211a1d4f33fba16c514284c.jpg",
   "https://i.pinimg.com/736x/17/d5/bb/17d5bbf9b7368a841ff995c7f2cfe915.jpg",
@@ -62,148 +74,13 @@ const avatars = [
   "https://i.pinimg.com/736x/6b/58/bc/6b58bc776bb36afaf7fc569024cd7c21.jpg",
 ];
 
-const btnContinue = document.getElementById("btn-continue");
-const btnSignIn = document.getElementById("btn-signin");
-const btnSignUp = document.getElementById("btn-signup");
-
-const magazineLayout = document.getElementById("magazine-layout");
-const loginRequest = document.getElementById("login-request");
-const spinner = document.getElementById("spinner");
-const voteChocolate = document.getElementById("vote-chocolate");
-const voteStrawberry = document.getElementById("vote-strawberry");
-const commentText = document.getElementById("comment-text");
-const submitComment = document.getElementById("submit-comment");
 
 const totalVotesElement = document.getElementById("total-votes");
 const chocolateVotesElement = document.getElementById("chocolate-votes");
 const strawberryVotesElement = document.getElementById("strawberry-votes");
 const commentsList = document.getElementById("comments-list");
 
-const audioPlayer = document.getElementById("audioPlayer");
-const playBtn = document.getElementById("playBtn");
-const cover = document.getElementById("cover");
-const progressBar = document.getElementById("progressBar");
-const prevBtn = document.getElementById("prevBtn");
-const nextBtn = document.getElementById("nextBtn");
-
-/*revisar isso pq ta confuso e baixar as musicas???*/
-const songs = [
-  "./music/audio/just-for-me.mp3",
-  "./music/audio/say-ok.mp3",
-  "./music/audio/supernatural.mp3",
-  "./music/audio/make-you-mine.mp3",
-  "./music/audio/passion.mp3",
-];
-const covers = [
-  "./music/icons/just-for-me.jpg",
-  "./music/icons/say-ok.jpg",
-  "./music/icons/supernatural.jpg",
-  "./music/icons/make-you-mine.jpg",
-  "./music/icons/passion.jpg",
-];
-const songNames = [
-  "just for me",
-  "say ok",
-  "supernatural",
-  "make you mine",
-  "passion",
-];
-const songArtists = [
-  "pinkpantheress",
-  "vanessa hudgens",
-  "new jeans",
-  "madison beer",
-  "pinkpantheress",
-];
-
 loadComments();
-
-let currentPage = 1;
-const totalPages = document.querySelectorAll('.page').length;
-
-document.getElementById('nextPage').addEventListener('click', () => {
-  if (currentPage < totalPages) {
-    document.getElementById(`page${currentPage}`).classList.remove('active');
-    currentPage++;
-    document.getElementById(`page${currentPage}`).classList.add('active');
-  }
-});
-
-document.getElementById('prevPage').addEventListener('click', () => {
-  if (currentPage > 1) {
-    document.getElementById(`page${currentPage}`).classList.remove('active');
-    currentPage--;
-    document.getElementById(`page${currentPage}`).classList.add('active');
-  }
-});
-document.getElementById('page1').classList.add('active');
-
-
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    fetchDocuments();
-  } else {
-    console.log("usuário não autenticado.");
-  }
-});
-
-function fetchDocuments() {
-  const votesCollection = collection(db, "votes");
-
-  getDocs(votesCollection)
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
-      });
-    })
-    .catch((error) => {
-      console.error("wrro ao consultar documentos:", error);
-    });
-}
-
-let currentSongIndex = 0;
-
-function loadSong() {
-  audioPlayer.src = songs[currentSongIndex];
-  cover.src = covers[currentSongIndex];
-  songName.textContent = songNames[currentSongIndex];
-  songArtist.textContent = songArtists[currentSongIndex];
-}
-
-function togglePlay() {
-  if (audioPlayer.paused) {
-    audioPlayer.play();
-    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-  } else {
-    audioPlayer.pause();
-    playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
-  }
-}
-
-playBtn.addEventListener("click", togglePlay);
-
-prevBtn.addEventListener("click", () => {
-  currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
-  loadSong();
-  if (!audioPlayer.paused) audioPlayer.play();
-});
-
-nextBtn.addEventListener("click", () => {
-  currentSongIndex = (currentSongIndex + 1) % songs.length; /*?*/
-  loadSong();
-  if (!audioPlayer.paused) audioPlayer.play();
-});
-
-audioPlayer.addEventListener("timeupdate", () => {
-  const { currentTime, duration } = audioPlayer;
-  progressBar.value = (currentTime / duration) * 100;
-});
-
-progressBar.addEventListener("change", () => {
-  audioPlayer.currentTime = (progressBar.value / 100) * audioPlayer.duration;
-});
-
-loadSong();
 
 function showSpinner() {
   spinner.style.display = "block";
@@ -213,10 +90,41 @@ function hideSpinner() {
   spinner.style.display = "none";
 }
 
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    showSpinner(); /*consertando display do spinner*/
+    fetchDocuments();
+    hideSpinner();
+    loadComments();
+  } else {
+    console.log("usuário não autenticado.");
+  }
+});
+
+function fetchDocuments() {
+  showSpinner();
+  const votesCollection = collection(db, "votes");
+
+  getDocs(votesCollection)
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, " => ", doc.data());
+      });
+      hideSpinner();
+    })
+    .catch((error) => {
+      console.error("Erro ao consultar documentos:", error);
+      hideSpinner();
+    });
+}
+
 function showBittersweetContent() {
-  hideSpinner();
-  loginRequest.style.display = "none";
-  magazineLayout.style.display = "block";
+  showSpinner();
+  setTimeout(() => {
+    hideSpinner();
+    loginRequest.style.display = "none";
+    magazineLayout.style.display = "block";
+  }, 2000);
 }
 
 function showMainContent() {
@@ -237,8 +145,9 @@ function showMainContent() {
     setTimeout(() => {
       hideSpinner();
       magazineLayout.style.display = "block";
-    }, 500);
+    }, 2000);
   });
+  g;
   document
     .getElementById("btn-signin")
     .addEventListener("click", showLoginForm);
@@ -256,7 +165,7 @@ btnContinue.addEventListener("click", () => {
   setTimeout(() => {
     hideSpinner();
     magazineLayout.style.display = "block";
-  }, 5000);
+  }, 2000);
 });
 btnSignIn.addEventListener("click", showLoginForm);
 btnSignUp.addEventListener("click", showSignUpForm);
@@ -482,4 +391,3 @@ submitComment.addEventListener("click", async () => {
 });
 
 fetchVotes();
-
