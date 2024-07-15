@@ -6,9 +6,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&family=Hi+Melody&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Antic+Didone&family=Flamenco:wght@300;400&family=Hi+Melody&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Flamenco:wght@300;400&family=Jua&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="page-3.css">
     <link rel="stylesheet" href="main.css">
@@ -33,86 +32,13 @@
     <div id="magazine-layout" style="display: none;">
         <h1>Bem-vindo à Bittersweet Magazine!</h1>
         <div id="pages-layout">
-            <div class="magazine">
-                <div class="page" id="page1">
-                    <h3>Página 1</h3>
-                    <p>capa</p>
-                </div>
-                
-                <div class="page" id="page2">
-                    <h1>Página 2</h1>
-                    <p>sumário</p>
-                </div>
-                
-                <div class="page" id="page3">
-                    <div id="page-3">
-                        <div id="ichiko-side">
-                            <p>ICHIKO AOBA</p>
-                            <span class="side-text">青葉市子</span>
-                            
-                            <div id="poster">
-
-                                <div class="show-list">
-                                    <ul class="agust">
-                                        <li>UK & EU</li>
-                                        <li>AGOSTO</li>
-                                        <li>20 Wales, gb, Festival do Homem Verde</li>
-                                        <li>25 Glasgow, GB Hug & Pint</li>
-                                        <li>26 Copenhagen, DK, Vega</li>
-                                        <li>30 Manchester, GB, Royal Universidade de Musica</li>
-                                    </ul>
-    
-                                    <ul class="oct">
-                                        <li>AMERICA DO NORTE</li>
-                                        <li>OUTUBRO</li>
-                                        <li>Los Angeles, CA, Masonic Lodge 14</li>
-                                        <li>São Francisco, CA, Swedish America Hall 15</li>
-                                        <li>Seattle, WA, The Neptune Theatre 17</li>
-                                        <li>Portland, OR, Polaris Hall 18</li>
-                                        <li>Chicago, IL, Constelation 21</li>
-                                        <li>Toronto, MA, National Sawdust 26</li>
-                                        <li>Filadelfia, PA, World Cafe Live 28</li>
-                                    </ul>   
-                                </div>
-
-                                <div class="show-list-cont">
-                                    <ul class="sept">
-                                        <li>SETEMBRO</li>
-                                        <li>03 LONDRES, DE, Corte de Milton</li>
-                                        <li>07 Berlim, DE, Klezsalon</li>
-                                        <li>08 Jena, DE, TRAFO</li>
-                                        <li>09 Monique, DE, Happel & Ettlich</li>
-                                        <li>11 Stuttgart, DE Berkonzert</li>
-                                    </ul>
-                                </div>
-                                <img class="poster-jpg" src="./assets/page-3/ichiko-aoba-pg.jpg" alt="">
-                                <img class="draw" src="./assets/page-3/ichiko-draw.png" alt="">
-                                <div id="ichiko-entreview">
-                                    <p>Conhecida por sua voz etérea e melodias suaves, Ichiko conquistou fãs ao redor do mundo
-                                        com sua música única e comovente. Agora, ela traz sua mágica ao vivo para palcos de diversas cidades, 
-                                        proporcionando aos fãs a oportunidade rara de vivenciar sua arte de perto. 
-                                        A turnê será uma celebração de seu mais recente álbum e de suas clássicas canções que conquistaram o 
-                                        coração de muitos.  "Estou extremamente animada para compartilhar minha música com vocês ao vivo! Cada 
-                                        show é uma troca de emoções e energia, e mal posso esperar para criar memórias inesquecíveis com meus 
-                                        fãs ao redor do mundo. Espero vê-los em breve."
-                                    </p>
-                                </div>
-                                
-                            </div>
-                        </div>
-
-                        <div class="pottery-side">
-                            <h2>Topottery</h2>
-                        </div>
-                    </div>
-                </div>
-                <!-- Adicione mais páginas conforme necessário -->
-            </div>  
+            <div class="magazine" id="magazine"></div>  
             <div class="controls">
                 <button id="prevPage">Anterior</button>
                 <button id="nextPage">Próxima</button>
             </div>
-                <!-- <p>conteudo</p>
+        </div>
+                <!-- VOTOS <p>conteudo</p>
                 <h1>Vote for your favorite flavor</h1>
                 <button id="vote-chocolate">Vote for Chocolate</button>
                 <button id="vote-strawberry">Vote for Strawberry</button>
@@ -121,7 +47,7 @@
                 <p>Total Votes: <span id="total-votes">0</span></p>
                 <p>Chocolate Votes: <span id="chocolate-votes">0</span></p>
                 <p>Strawberry Votes: <span id="strawberry-votes">0</span></p> -->
-        </div>
+    
         
         <div id="interactive-bar">
             <div id="comment-section">
@@ -164,8 +90,7 @@
     </div>
 
     <script type="module" src="main.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js"></script>
+    <script src="pages.js"></script>
+    <script src="music.js"></script>
 </body>
 </html>
