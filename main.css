@@ -62,10 +62,13 @@ header {
     margin-top: -10px;
 }
 
-.login-request-entry h2 {
+#login-request h2,
+.login-request-entry h2,
+.login-request-register h2 {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-family: "Jua", sans-serif;
 }
 
 .login-request-entry input,
@@ -78,13 +81,19 @@ header {
     margin: 10px;
 }
 
+.btn-box{
+    display: flex;
+}
+
 .btn-box button {
     font-family: "Quicksand", sans-serif;
+    font-size: 12px;
     background-color: white;
     border: 1px solid gray;
     border-radius: 15px;
-    padding: 10px;
+    padding: 7px;
     cursor: pointer;
+    width: fit-content;
 }
 
 #login-form,
@@ -123,7 +132,7 @@ header {
     border-radius: 50%;
     border-top-color: #5e5e5e;
     animation: spin 1s ease-in-out infinite;
-    position: absolute;
+    position: fixed;
     top: 50%;
     left: 50%;
     z-index: 1000;
@@ -143,8 +152,8 @@ header {
 
 #pages-layout {
     border: 1px solid black;
-    /*margin: 10px;
-    padding: 10px; */
+    margin: 10px;
+    padding: 10px;
 }
 
 textarea {
@@ -261,7 +270,7 @@ textarea::-webkit-scrollbar-thumb {
     flex-direction: column;
     text-align: center;
     justify-content: center;
-
+    font-family: "Jua", sans-serif;
 }
 
 .music-info {
@@ -305,38 +314,3 @@ textarea::-webkit-scrollbar-thumb {
 #progressBar {
     width: 95%;
 }
-
-/*pages*/
-
-.magazine {
-    width: 80%;
-    height: 850px;
-    overflow: hidden;
-    position: relative;
-}
-
-.ichiko-side p{
-    display: none;
-    width: 100%;
-    height: 100%;
-    padding: 20px;
-    box-sizing: border-box;
-    background-color: white;
-    border: 1px solid #ccc;
-}
-
-.page.active {
-    display: block;
-}
-
-.controls {
-    margin-top: 20px;
-}
-
-button {
-    padding: 10px 20px;
-    margin: 0 10px;
-    cursor: pointer;
-}
-
-.magazine
