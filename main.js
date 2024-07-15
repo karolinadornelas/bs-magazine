@@ -1,4 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getDoc } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -15,7 +16,7 @@ import {
   query,
   where,
   addDoc,
-  serverTimestamp
+  serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -32,28 +33,38 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-auth.onAuthStateChanged((user) => {
-  if (user) {
-    fetchDocuments(); 
-    loadComments(); 
-  } else {
-    console.log("Usuário não autenticado.");
-  }
-});
+const avatars = [
+  "https://i.pinimg.com/736x/a3/92/3a/a3923a22e211a1d4f33fba16c514284c.jpg",
+  "https://i.pinimg.com/736x/17/d5/bb/17d5bbf9b7368a841ff995c7f2cfe915.jpg",
+  "https://i.pinimg.com/736x/c8/36/df/c836dffba11432a8aed18e39179f4eb7.jpg",
+  "https://i.pinimg.com/736x/d2/d7/ad/d2d7ad3bc9a72f57b631b5730d8b8622.jpg",
+  "https://i.pinimg.com/736x/b2/99/87/b299879b4df862ee2a1d0abe8a9ed23e.jpg",
+  "https://i.pinimg.com/736x/d2/a6/7f/d2a67f0e312369dfab2f5d0a527e1892.jpg",
+  "https://i.pinimg.com/736x/bb/62/b7/bb62b753c2079ba9179975b1c70b4f73.jpg",
+  "https://i.pinimg.com/736x/69/36/8e/69368e585219ea0d4e4c44078577ef34.jpg",
+  "https://i.pinimg.com/736x/8e/f5/0c/8ef50cec266e5fa21ae8273301270c7b.jpg",
+  "https://i.pinimg.com/736x/fe/22/ab/fe22ab7d15edf90aa6ec31f282f69929.jpg",
+  "https://i.pinimg.com/736x/f8/19/21/f81921e0dba9083b7c378e3323b555f6.jpg",
+  "https://i.pinimg.com/564x/22/30/77/2230772849e0be00eaffd456d0f555ad.jpg",
+  "https://i.pinimg.com/564x/9e/21/0f/9e210f647381ca68785ed2553aa2de47.jpg",
+  "https://i.pinimg.com/736x/c7/9e/d1/c79ed15806dac7577681321b6282ef46.jpg",
+  "https://i.pinimg.com/736x/90/56/b2/9056b2d009bb25cd91aa094bef9244c5.jpg",
+  "https://i.pinimg.com/564x/06/f0/b2/06f0b2ab6e496eebe341dda0c281dd63.jpg",
+  "https://i.pinimg.com/564x/f3/a5/68/f3a568023c7ac253f828bf24b95cca3a.jpg",
+  "https://i.pinimg.com/736x/f5/46/e1/f546e1ea808de522b937824471f7eb49.jpg",
+  "https://i.pinimg.com/736x/a9/26/54/a92654e81418facac1d7897186407c1c.jpg",
+  "https://i.pinimg.com/564x/5c/83/a6/5c83a6bcb5aa14f9df8d8f86eba7fe5f.jpg",
+  "https://i.pinimg.com/564x/af/e1/16/afe1161e9d0803b40183e6f5dd05d36a.jpg",
+  "https://i.pinimg.com/736x/0a/97/52/0a9752d184114a6c8bf4cd505e9e81a2.jpg",
+  "https://i.pinimg.com/736x/a1/65/d3/a165d3766daec0a6f991cfeb282ee108.jpg",
+  "https://i.pinimg.com/736x/16/30/8d/16308d3036d1c63d4e205e5fe38dedf5.jpg",
+  "https://i.pinimg.com/736x/c3/ba/b1/c3bab132060ea341ad9128ddd8025bb7.jpg",
+  "https://i.pinimg.com/736x/6b/58/bc/6b58bc776bb36afaf7fc569024cd7c21.jpg",
+];
 
-function fetchDocuments() {
-  const votesCollection = collection(db, "votes");
-
-  getDocs(votesCollection)
-    .then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log(doc.id, " => ", doc.data());
-      });
-    })
-    .catch((error) => {
-      console.error("Erro ao consultar documentos:", error);
-    });
-}
+const btnContinue = document.getElementById("btn-continue");
+const btnSignIn = document.getElementById("btn-signin");
+const btnSignUp = document.getElementById("btn-signup");
 
 const magazineLayout = document.getElementById("magazine-layout");
 const loginRequest = document.getElementById("login-request");
@@ -68,18 +79,87 @@ const chocolateVotesElement = document.getElementById("chocolate-votes");
 const strawberryVotesElement = document.getElementById("strawberry-votes");
 const commentsList = document.getElementById("comments-list");
 
-const audioPlayer = document.getElementById('audioPlayer');
-const playBtn = document.getElementById('playBtn');
-const cover = document.getElementById('cover');
-const progressBar = document.getElementById('progressBar');
-const prevBtn = document.getElementById('prevBtn');
-const nextBtn = document.getElementById('nextBtn');
+const audioPlayer = document.getElementById("audioPlayer");
+const playBtn = document.getElementById("playBtn");
+const cover = document.getElementById("cover");
+const progressBar = document.getElementById("progressBar");
+const prevBtn = document.getElementById("prevBtn");
+const nextBtn = document.getElementById("nextBtn");
 
-/*revisar isso pq ta confuso*/
-const songs = ['song1.mp3'];
-const covers = ['./icons/pain.jpg'];
-const songNames = ['pain'];
-const songArtists = ['pinkpantheress'];
+/*revisar isso pq ta confuso e baixar as musicas???*/
+const songs = [
+  "./music/audio/just-for-me.mp3",
+  "./music/audio/say-ok.mp3",
+  "./music/audio/supernatural.mp3",
+  "./music/audio/make-you-mine.mp3",
+  "./music/audio/passion.mp3",
+];
+const covers = [
+  "./music/icons/just-for-me.jpg",
+  "./music/icons/say-ok.jpg",
+  "./music/icons/supernatural.jpg",
+  "./music/icons/make-you-mine.jpg",
+  "./music/icons/passion.jpg",
+];
+const songNames = [
+  "just for me",
+  "say ok",
+  "supernatural",
+  "make you mine",
+  "passion",
+];
+const songArtists = [
+  "pinkpantheress",
+  "vanessa hudgens",
+  "new jeans",
+  "madison beer",
+  "pinkpantheress",
+];
+
+loadComments();
+
+let currentPage = 1;
+const totalPages = document.querySelectorAll('.page').length;
+
+document.getElementById('nextPage').addEventListener('click', () => {
+  if (currentPage < totalPages) {
+    document.getElementById(`page${currentPage}`).classList.remove('active');
+    currentPage++;
+    document.getElementById(`page${currentPage}`).classList.add('active');
+  }
+});
+
+document.getElementById('prevPage').addEventListener('click', () => {
+  if (currentPage > 1) {
+    document.getElementById(`page${currentPage}`).classList.remove('active');
+    currentPage--;
+    document.getElementById(`page${currentPage}`).classList.add('active');
+  }
+});
+document.getElementById('page1').classList.add('active');
+
+
+auth.onAuthStateChanged((user) => {
+  if (user) {
+    fetchDocuments();
+  } else {
+    console.log("usuário não autenticado.");
+  }
+});
+
+function fetchDocuments() {
+  const votesCollection = collection(db, "votes");
+
+  getDocs(votesCollection)
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        console.log(doc.id, " => ", doc.data());
+      });
+    })
+    .catch((error) => {
+      console.error("wrro ao consultar documentos:", error);
+    });
+}
 
 let currentSongIndex = 0;
 
@@ -93,39 +173,37 @@ function loadSong() {
 function togglePlay() {
   if (audioPlayer.paused) {
     audioPlayer.play();
-    playBtn.textContent = 'Pause';
+    playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
   } else {
     audioPlayer.pause();
-    playBtn.textContent = 'Play';
+    playBtn.innerHTML = '<i class="fa-solid fa-play"></i>';
   }
 }
 
-playBtn.addEventListener('click', togglePlay);
+playBtn.addEventListener("click", togglePlay);
 
-prevBtn.addEventListener('click', () => {
+prevBtn.addEventListener("click", () => {
   currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
   loadSong();
-  if (!audioPlayer.paused) audioPlayer.play(); 
+  if (!audioPlayer.paused) audioPlayer.play();
 });
 
-nextBtn.addEventListener('click', () => {
-  currentSongIndex = (currentSongIndex + 1) % songs.length;
+nextBtn.addEventListener("click", () => {
+  currentSongIndex = (currentSongIndex + 1) % songs.length; /*?*/
   loadSong();
-  if (!audioPlayer.paused) audioPlayer.play(); 
+  if (!audioPlayer.paused) audioPlayer.play();
 });
 
-audioPlayer.addEventListener('timeupdate', () => {
+audioPlayer.addEventListener("timeupdate", () => {
   const { currentTime, duration } = audioPlayer;
   progressBar.value = (currentTime / duration) * 100;
 });
 
-
-progressBar.addEventListener('change', () => {
+progressBar.addEventListener("change", () => {
   audioPlayer.currentTime = (progressBar.value / 100) * audioPlayer.duration;
 });
 
 loadSong();
-
 
 function showSpinner() {
   spinner.style.display = "block";
@@ -140,6 +218,53 @@ function showBittersweetContent() {
   loginRequest.style.display = "none";
   magazineLayout.style.display = "block";
 }
+
+function showMainContent() {
+  loginRequest.innerHTML = `
+        <h2>bittersweet</h2>
+        <p>para ter acesso ao conteúdo interativo,
+            faça o login ou crie uma conta.
+        </p>
+        <div class="btn-box">
+            <button type="button" id="btn-continue">continuar sem logar</button>
+            <button type="button" id="btn-signin">entrar</button>
+            <button type="button" id="btn-signup">criar uma conta</button>
+        </div>
+    `;
+  document.getElementById("btn-continue").addEventListener("click", () => {
+    loginRequest.style.display = "none";
+    showSpinner();
+    setTimeout(() => {
+      hideSpinner();
+      magazineLayout.style.display = "block";
+    }, 500);
+  });
+  document
+    .getElementById("btn-signin")
+    .addEventListener("click", showLoginForm);
+  document
+    .getElementById("btn-signup")
+    .addEventListener("click", showSignUpForm);
+  updateVoteCounts();
+  loginRequest.style.display = "block";
+  magazineLayout.style.display = "none";
+}
+
+btnContinue.addEventListener("click", () => {
+  loginRequest.style.display = "none";
+  showSpinner();
+  setTimeout(() => {
+    hideSpinner();
+    magazineLayout.style.display = "block";
+  }, 5000);
+});
+btnSignIn.addEventListener("click", showLoginForm);
+btnSignUp.addEventListener("click", showSignUpForm);
+document
+  .getElementById("btn-continue")
+  .addEventListener("click", showBittersweetContent);
+document.getElementById("btn-signin").addEventListener("click", showLoginForm);
+document.getElementById("btn-signup").addEventListener("click", showSignUpForm);
 
 function showLoginForm() {
   loginRequest.innerHTML = `
@@ -174,11 +299,11 @@ function showLoginForm() {
         await signInWithEmailAndPassword(auth, email, password);
         const user = auth.currentUser;
         hideSpinner();
-        alert(`Bem-vindo de volta, ${user.displayName}`);
+        alert(`bem-vindo de volta, ${user.displayName}`);
         showBittersweetContent();
       } catch (error) {
         hideSpinner();
-        alert(`Erro: ${error.message}`);
+        alert(`erro: ${error.message}`);
       }
     });
 
@@ -189,23 +314,23 @@ function showLoginForm() {
 
 function showSignUpForm() {
   loginRequest.innerHTML = `
-        <h2>bittersweet</h2>
-        <p>vamos criar sua conta! é rapidinho.</p>
-        <form id="signup-form">
-            <label for="signup-email">Email:</label>
-            <input type="email" id="signup-email" required>
-            <label for="signup-password">Senha:</label>
-            <input type="password" id="signup-password" required>
-            <label for="signup-username">Username:</label>
-            <input type="text" id="signup-username" required>
-            
-            <div class="signup-form-box">
-                <button type="submit">Criar Conta</button>
-                <button id="back-to-main">Voltar</button>    
-            </div>
-            
-        </form>
-    `;
+  <h2>bittersweet</h2>
+  <p>vamos criar sua conta! é rapidinho.</p>
+  
+  <form id="signup-form">
+    <label for="signup-email">Email:</label>
+      <input type="email" id="signup-email" required>
+    <label for="signup-password">Senha:</label>
+      <input type="password" id="signup-password" required>
+    <label for="signup-username">Username:</label>
+      <input type="text" id="signup-username" required>
+    
+    <div class="signup-form-box">
+      <button type="submit">Criar Conta</button>
+      <button id="back-to-main" >Voltar</button>    
+    </div>
+  </form>
+  `;
 
   document
     .getElementById("signup-form")
@@ -235,7 +360,7 @@ function showSignUpForm() {
         });
 
         hideSpinner();
-        alert(`Conta criada com sucesso! Bem-vindo, ${username}`);
+        alert(`fique à vontade, ${username}`);
         showBittersweetContent();
       } catch (error) {
         hideSpinner();
@@ -248,37 +373,31 @@ function showSignUpForm() {
     .addEventListener("click", showMainContent);
 }
 
-function showMainContent() {
-  loginRequest.style.display = "block";
-  magazineLayout.style.display = "none";
-}
-
-document
-  .getElementById("btn-continue")
-  .addEventListener("click", showBittersweetContent);
-document.getElementById("btn-signin").addEventListener("click", showLoginForm);
-document.getElementById("btn-signup").addEventListener("click", showSignUpForm);
-
 voteChocolate.addEventListener("click", () => vote("chocolate"));
 voteStrawberry.addEventListener("click", () => vote("strawberry"));
 
-function vote(flavor) {
+async function vote(flavor) {
   const user = auth.currentUser;
   if (!user) {
-    alert("Você precisa estar logado para votar.");
+    alert("você precisa estar logado para votar.");
     return;
   }
 
   const voteRef = doc(db, "votes", user.uid);
 
-  setDoc(voteRef, { flavor }, { merge: true })
-    .then(() => {
-      alert(`Voto registrado: ${flavor}`);
-      fetchVotes();
-    })
-    .catch((error) => {
-      console.error("Erro ao registrar voto:", error);
-    });
+  try {
+    const voteDoc = await getDoc(voteRef);
+    if (voteDoc.exists()) {
+      alert("opa, você já votou. sem vira folhas por aqui.");
+      return;
+    }
+
+    await setDoc(voteRef, { flavor }, { merge: true });
+    alert(`então.. ${flavor}, né? beleza, registramos aqui.`);
+    fetchVotes();
+  } catch (error) {
+    console.error("Erro ao registrar voto:", error);
+  }
 }
 
 function fetchVotes() {
@@ -320,41 +439,15 @@ function loadComments() {
     });
 }
 
-const avatars = [
-  "https://i.pinimg.com/736x/a3/92/3a/a3923a22e211a1d4f33fba16c514284c.jpg",
-  "https://i.pinimg.com/736x/17/d5/bb/17d5bbf9b7368a841ff995c7f2cfe915.jpg",
-  "https://i.pinimg.com/736x/c8/36/df/c836dffba11432a8aed18e39179f4eb7.jpg",
-  "https://i.pinimg.com/736x/d2/d7/ad/d2d7ad3bc9a72f57b631b5730d8b8622.jpg",
-  "https://i.pinimg.com/736x/b2/99/87/b299879b4df862ee2a1d0abe8a9ed23e.jpg",
-  "https://i.pinimg.com/736x/d2/a6/7f/d2a67f0e312369dfab2f5d0a527e1892.jpg",
-  "https://i.pinimg.com/736x/bb/62/b7/bb62b753c2079ba9179975b1c70b4f73.jpg",
-  "https://i.pinimg.com/736x/69/36/8e/69368e585219ea0d4e4c44078577ef34.jpg",
-  "https://i.pinimg.com/736x/8e/f5/0c/8ef50cec266e5fa21ae8273301270c7b.jpg",
-  "https://i.pinimg.com/736x/fe/22/ab/fe22ab7d15edf90aa6ec31f282f69929.jpg",
-  "https://i.pinimg.com/736x/f8/19/21/f81921e0dba9083b7c378e3323b555f6.jpg",
-  "https://i.pinimg.com/564x/22/30/77/2230772849e0be00eaffd456d0f555ad.jpg",
-  "https://i.pinimg.com/564x/9e/21/0f/9e210f647381ca68785ed2553aa2de47.jpg",
-  "https://i.pinimg.com/736x/c7/9e/d1/c79ed15806dac7577681321b6282ef46.jpg",
-  "https://i.pinimg.com/736x/90/56/b2/9056b2d009bb25cd91aa094bef9244c5.jpg",
-  "https://i.pinimg.com/564x/06/f0/b2/06f0b2ab6e496eebe341dda0c281dd63.jpg",
-  "https://i.pinimg.com/564x/f3/a5/68/f3a568023c7ac253f828bf24b95cca3a.jpg",
-  "https://i.pinimg.com/736x/f5/46/e1/f546e1ea808de522b937824471f7eb49.jpg",
-  "https://i.pinimg.com/736x/a9/26/54/a92654e81418facac1d7897186407c1c.jpg",
-  "https://i.pinimg.com/564x/5c/83/a6/5c83a6bcb5aa14f9df8d8f86eba7fe5f.jpg",
-  "https://i.pinimg.com/564x/af/e1/16/afe1161e9d0803b40183e6f5dd05d36a.jpg",
-  "https://i.pinimg.com/736x/0a/97/52/0a9752d184114a6c8bf4cd505e9e81a2.jpg",
-  "https://i.pinimg.com/736x/a1/65/d3/a165d3766daec0a6f991cfeb282ee108.jpg",
-  "https://i.pinimg.com/736x/16/30/8d/16308d3036d1c63d4e205e5fe38dedf5.jpg",
-  "https://i.pinimg.com/736x/c3/ba/b1/c3bab132060ea341ad9128ddd8025bb7.jpg",
-  "https://i.pinimg.com/736x/6b/58/bc/6b58bc776bb36afaf7fc569024cd7c21.jpg"
-];
-
 function displayComment(comment) {
   const commentElement = document.createElement("div");
   commentElement.classList.add("comment");
 
   const randomIndex = Math.floor(Math.random() * avatars.length);
   const userPhoto = avatars[randomIndex];
+  const timestamp = comment.timestamp
+    ? new Date(comment.timestamp.seconds * 1000).toLocaleString()
+    : "";
 
   commentElement.innerHTML = `
     <div class="user-info">
@@ -362,19 +455,17 @@ function displayComment(comment) {
         <img src="${userPhoto}" alt="User Photo">  
         <div class="user-timestamp">
           <p>${comment.username}</p>
-          <span>${new Date(comment.timestamp.seconds * 1000).toLocaleString()}</span>
+          <span>${timestamp}</span>
         </div>
       </div>
       <div class="user-comment">
         <p>${comment.text}</p>
       </div>
     </div>
-    
   `;
 
   commentsList.appendChild(commentElement);
 }
-
 
 submitComment.addEventListener("click", async () => {
   const user = auth.currentUser;
@@ -388,23 +479,7 @@ submitComment.addEventListener("click", async () => {
     alert("hm está faltando algumas letras aqui.");
     return;
   }
-
-  const randomPhotoUrl = `https://placehold.co/35x35?text=${Math.random().toString(36).substr(2, 5)}`;
-
-  try {
-    await addDoc(collection(db, "comments"), {
-      userId: user.uid,
-      username: user.displayName,
-      text: commentTextValue,
-      timestamp: serverTimestamp(),
-      photoUrl: randomPhotoUrl,
-    });
-
-    commentText.value = "";
-    loadComments();
-  } catch (error) {
-    console.error("Erro ao adicionar comentário:", error);
-  }
 });
 
 fetchVotes();
+

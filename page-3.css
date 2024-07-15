@@ -1,0 +1,100 @@
+@font-face {
+    font-family: 'humour';
+    src: url(./font/humour_web/Humour-Normal.woff);
+}
+
+#page-3{
+    border: 1px solid black;
+    display: flex;
+}
+
+#ichiko-side{
+    background-color: #F9F5EC;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    width: 650px;
+    height: 830px;
+}
+
+#ichiko-side p{
+    font-family: "Antic Didone", sans-serif;
+    font-size: 45px;
+    margin-left: 175px;
+}
+
+.side-text{
+    writing-mode: vertical-lr;
+    font-family: "humour";
+    font-size: 55px;
+    letter-spacing: 15px;
+    margin-top: -75px;
+}
+
+#poster{
+    border: 1px solid red;
+}
+
+.page {
+    display: none;
+}
+
+.page.active {
+    display: block;
+}
+
+.show-list{
+    font-family: "Hi Melody";
+    font-size: 18px;
+    position: absolute;
+    margin-left: 55px;
+    margin-top: -245px;
+    list-style: none;
+    justify-content: space-around;
+    display: flex;
+    width: 590px;
+}
+
+.agust{
+    list-style: none;
+}
+
+.oct{
+    list-style: none;
+    text-align: end;
+    margin-left: -75px;
+}
+
+.sept{
+    font-family: "Hi Melody";
+    position: absolute;
+    margin-left: 65px;
+    margin-top: -70px;
+    font-size: 18px;
+    list-style: none;
+}
+
+.draw{
+    width: 125px;
+    margin-top: 75px;
+    margin-left: 5px;
+    position: absolute;
+}
+
+.poster-jpg{
+    width: 480px;
+}
+
+#ichiko-entreview{
+    width: 450px;
+}
+
+#ichiko-entreview p{
+    font-family: 'Flamenco';
+    font-size: 12px;
+    margin-top: -219px;
+    margin-left: 430px;
+    width: 215px;
+    text-align: end;
+    border: 1px solid black;
+}

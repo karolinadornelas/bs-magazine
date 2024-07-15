@@ -138,6 +138,7 @@ header {
 #magazine-layout {
     margin: 10px;
     padding: 15px;
+
 }
 
 #pages-layout {
@@ -209,7 +210,7 @@ textarea::-webkit-scrollbar-thumb {
     width: 100%;
 }
 
-#comment-section{
+#comment-section {
     height: 450px;
     width: 100%;
 }
@@ -245,7 +246,7 @@ textarea::-webkit-scrollbar-thumb {
 
 /*music player*/
 
-.wrap{
+.wrap {
     border: 1px solid rgb(253, 253, 253);
     box-shadow: 0 0 20px rgba(154, 154, 154, 0.466);
     border-radius: 25px;
@@ -263,11 +264,11 @@ textarea::-webkit-scrollbar-thumb {
 
 }
 
-.music-info{
+.music-info {
     display: flex;
     font-size: 12px;
     justify-content: space-around;
-    
+
 }
 
 .music-info img {
@@ -279,7 +280,7 @@ textarea::-webkit-scrollbar-thumb {
 }
 
 
-.music-description{
+.music-description {
     display: block;
 }
 
@@ -304,3 +305,38 @@ textarea::-webkit-scrollbar-thumb {
 #progressBar {
     width: 95%;
 }
+
+/*pages*/
+
+.magazine {
+    width: 80%;
+    height: 850px;
+    overflow: hidden;
+    position: relative;
+}
+
+.ichiko-side p{
+    display: none;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: white;
+    border: 1px solid #ccc;
+}
+
+.page.active {
+    display: block;
+}
+
+.controls {
+    margin-top: 20px;
+}
+
+button {
+    padding: 10px 20px;
+    margin: 0 10px;
+    cursor: pointer;
+}
+
+.magazine
